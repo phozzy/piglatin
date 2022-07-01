@@ -1,10 +1,12 @@
 use std::io;
-fn get_string() -> String {
+
+fn get1word() -> String {
     loop {
         let mut word = String::new();
         println!("Please enter your word:");
-        io::stdin().read_line(&mut word)
-            .expect("Failed to read line");
+        io::stdin()
+            .read_line(&mut word)
+            .expect("Failed to read the user's input.");
         break match word.trim().parse() {
             Ok(str) => str,
             Err(_) => {
@@ -14,28 +16,29 @@ fn get_string() -> String {
         };
     }
 }
-fn convert_string(word: &String) -> String {
-    let vowel = ['a', 'e', 'i', 'o', 'u'];
-    let mut counter: u32 = 0;
-    let mut result = String::new();
-    let mut ending = String::new();
-    for character in word.chars() {
-        counter += 1;
-        if counter == 1 {
-            if vowel.contains(&character) {
+
+fn piglatin(word: &String) -> String {
+    let vowels = "aeoui";
+    let mut result: String = String::new();
+    let mut ending: String = String::new();
+    let mut first_char = true;
+    for char in word.chars() {
+        if first_char {
+            first_char = false;
+            if vowels.contains(char) {
                 ending = String::from("hay");
-                result = character.to_string();
             } else {
-                ending = character.to_string() + "ay";
-                result = "".to_string();
-            };
-        } else {
-            result += &character.to_string();
-        };
-    };
+                ending = String::from(char) + &String::from("ay");
+                continue;
+            }
+        }
+        result += &String::from(char);
+    }
     result + &ending
 }
+
 fn main() {
-    let word = get_string();
-    println!("converted to: {}", convert_string(&word));
+    let word = get1word();
+    let pigword = piglatin(&word);
+    println!("{}", pigword);
 }
