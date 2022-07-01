@@ -20,14 +20,12 @@ fn get1word() -> String {
 fn piglatin(word: &String) -> String {
     let vowels = "aeoui";
     let mut result: String = String::new();
-    let mut ending: String = String::new();
+    let mut ending = String::from("hay");
     let mut first_char = true;
     for char in word.chars() {
         if first_char {
             first_char = false;
-            if vowels.contains(char) {
-                ending = String::from("hay");
-            } else {
+            if !vowels.contains(char) {
                 ending = String::from(char) + &String::from("ay");
                 continue;
             }
